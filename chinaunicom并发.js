@@ -12,6 +12,26 @@ export chinaUnicomCookie="a3e4c1ff25da2xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 cron: 0 0,7,20 * * *
 */
+require("global-agent/bootstrap");
+global.GLOBAL_AGENT.HTTP_PROXY="http://192.168.0.83:8899";
+const axios = require('axios');
+axios.get('https://api.ipify.org?format=json')
+  .then(response => {
+    const ip = response.data.ip;
+    console.log('当前IP地址是：', ip);
+    return axios.get(`http://ip-api.com/json/${ip}?lang=zh-CN`);
+  })
+  .then(response => {
+    const data = response.data;
+    console.log(`IP地址：${data.query}`);
+    console.log(`国家：${data.country}`);
+    console.log(`地区：${data.regionName}`);
+    console.log(`城市：${data.city}`);
+    console.log(`ISP：${data.isp}`);
+  })
+  .catch(error => {
+    console.error('获取IP地址或所在地信息时出错：', error);
+  });
 const _0x4c672b = _0x4a9430("中国联通"),
   _0x2bba68 = require("got"),
   _0x2bbc1d = require("path"),
